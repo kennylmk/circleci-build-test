@@ -1,0 +1,37 @@
+{
+  "name": "testpage",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha test/test.js --timeout 0 --exit",
+    "build": "browserify server.js > dist/bundle.js",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kennylmk/testpage.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kennylmk/testpage/issues"
+  },
+  "homepage": "https://github.com/kennylmk/testpage#readme",
+  "dependencies": {
+    "browserify": "^17.0.0",
+    "chai": "^4.3.4",
+    "express": "^4.17.1",
+    "lodash": "^4.17.21",
+    "mochawesome": "^4.1.0",
+    "puppeteer": "^9.1.1"
+  },
+  "devDependencies": {
+    "chromedriver": "^79.0.3",
+    "mocha": "^8.4.0",
+    "selenium-webdriver": "^4.0.0-beta.3"
+  }
+}
