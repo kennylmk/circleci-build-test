@@ -1,0 +1,169 @@
+
+https://guides.rubyonrails.org/getting_started.html
+1. Ruby install
+	gem UPDATE
+	gem update --system
+2. SQLite3 install
+	gem install sqlite3-ruby
+
+3. Node.js install
+4. Yarn install
+5. install rails
+	gem install rails
+6. Create new application
+	rails new blog
+7. Start up server
+	cd blog
+	rails server or rails s
+8. Access http://localhost:3000 in browser
+9. Setup route
+	config/routes.rb
+	Rails.application.routes.draw do
+	  get "/articles", to: "articles#index"    # map to controller
+
+	  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
+	end
+10. Generate Controller
+	a. rails generate controller Articles index --skip-routes   #Create app/controllers/articles_controller.rb
+
+	b. class ArticlesController < ApplicationController
+		  def index  # views/articles/index.html.erb
+		  end
+		end
+	c. Access http://localhost:3000/articles
+11. Setting the Application Home page
+	config/routes.rb
+
+	Rails.application.routes.draw do
+	  root "articles#index"  # http://localhost:3000 map to ActiclesController/index
+
+	  get "/articles", to: "articles#index"  # http://localhost:3000/articles
+	end
+
+
+12. Generate Model (DB)
+
+	a. rails generate model Article title:string body:text
+	   # create db/migrate/<timestamp>_create_articles.rb,  model file models/article.rb
+
+	   # migration file
+		   class CreateArticles < ActiveRecord::Migration[6.0]
+			  def change
+			    create_table :articles do |t|
+			      t.string :title
+			      t.text :body
+
+			      t.timestamps
+			    end
+			  end
+			end
+	b. migrate
+		rails db:migrate
+
+13. Use Model to interact with Database
+	a. rails console # open irb
+	b. irb> article = Article.new(title: "Hello Rails", body: "I am on Rails!") # initialize object but not save to database
+	c. irb> article.save  # Save to database
+	d. irb> article  # show record
+	e. irb> Article.find(1)  #Search record
+	f. irb> Article.all  # show all records
+14. Show list of Articles
+	a. controllers/articles_controller.rb
+		class ArticlesController < ApplicationController
+		  def index
+		    @articles = Article.all
+		  end
+		end
+	b. views/articles/index.html.erb
+		<h1>Articles</h1>
+
+		<ul>
+		  <% @articles.each do |article| %>
+		    <li>
+		      <%= article.title %>
+		    </li>
+		  <% end %>
+		</ul>
+	c. http://localhost:3000
+
+15. Show Single record
+	a. config/routes.rb
+		Rails.application.routes.draw do
+		  root "articles#index"
+
+		  get "/articles", to: "articles#index"
+		  get "/articles/:id", to: "articles#show"
+		end
+	b. controllers/articles_controller.rb
+
+		class ArticlesController < ApplicationController
+		  def index
+		    @articles = Article.all
+		  end
+
+		  def show
+		    @article = Article.find(params[:id])
+		  end
+		end
+
+	c. views/articles/show.html.erb
+		<h1><%= @article.title %></h1>
+
+		<p><%= @article.body %></p>																																																																																																																																																																																																																																																			
+
+	d. http://localhost:3000/articles/1
+	e. views/articles/index.html.erb
+		<h1>Articles</h1>
+
+		<ul>
+		  <% @articles.each do |article| %>
+		    <li>
+		      <a href="/articles/<%= article.id %>">
+		        <%= article.title %>
+		      </a>
+		    </li>
+		  <% end %>
+		</ul>
+
+
+
+
+rails c # access rails console
+ActiveRecord::Base.connection.tables # list all the tables
+article.all # list all the records
+
+																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																	
+																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																	
+$ rails new todos-api --api -T
+
+
+<PAGINATION - kaminari>
+https://qiita.com/wonder_meet/items/33f6a257d94346c7e476
+
+gem 'kaminari'
+gem 'kaminari-activerecord'
+bundle install
+
+
+<TESTING>
+https://www.digitalocean.com/community/tutorials/build-a-restful-json-api-with-rails-5-part-one
+gemfile
+group :development, :test do
+  gem 'rspec-rails', '~> 3.5'
+end
+
+group :test do
+  gem 'factory_bot_rails', '~> 4.0'
+  gem 'shoulda-matchers', '~> 3.1'
+  gem 'faker'
+  gem 'database_cleaner'
+end
+
+bundle install
+rails generate rspec:install
+rails generate rspec:model score
+
+rails db:migrate RAILS_ENV=test
+rails test test/models/article_test.rb
+
+https://github.com/rspec/rspec-rails
